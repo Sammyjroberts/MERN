@@ -4,9 +4,8 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const contactsRoutes = require("./routes/contacts.routes");
 
-const index = require('./routes/index');
-const users = require('./routes/users');
 const cors = require('cors')
 
 const app = express();
@@ -25,28 +24,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-const contacts = [
-    {name:"Sam", number:"9492281074"},
-    {name:"bill", number:"9492271074"}
-];
-app.post("/api/contacts", (req,res) => {
-  const contact = {
-    name : req.body.name, number : req.body.number
-  };
-  contacts.push(contact);
-  res.json(contacts);
-});
-app.get("/api/contacts", (req, res) => {
-    console.log("EYYYY");
-    res.json(contacts);
-});
-app.put("/api/contacts/:id", (req, res) => {
-    contacts[req.params.id] = req.body.contact;
-    res.json(contacts);
-});
 
-app.use('/', index);
-app.use('/users', users);
+
+
+app.use(contactsRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
